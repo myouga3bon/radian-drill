@@ -3,107 +3,108 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@500;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-/* Layout: 1カラム(最大680px) 設定パネル → 問題カード(選択肢2x2・ヒント・解説) → 結果。
-   色は薄いブルーを「未選択」の標準にし、選択・正解・不正解だけ色を変える。 */
+/* Layout: 1カラム(最大700px) 設定パネル → 問題カード(選択肢2x2・ヒントボタン・解説・単位円) → 結果。
+   ベースはピンク。選ばれていない選択肢・ボタンは薄いブルーのまま（黒枠にしない）。 */
 :root{
-  --bg:#f2f7fd; --surface:#ffffff; --ink:#14213d; --muted:#586987; --line:#cfe0f5;
-  --accent:#2563eb; --accent-ink:#ffffff; --on-choice:#1b3f95;
-  --choice:#e4f0ff; --choice-hover:#d3e6ff; --choice-line:#b9d5f7;
+  --bg:#fff0f6; --surface:#ffffff; --ink:#3b1530; --muted:#785069; --line:#f6cde0;
+  --accent:#d6336c; --accent-ink:#ffffff; --soft:#ffe0ec; --soft-ink:#a61e4d;
+  --on-choice:#1b3f95; --choice:#e4f0ff; --choice-hover:#d3e6ff; --choice-line:#b9d5f7;
   --ok:#157347; --ok-bg:#dcf5e7; --ok-line:#8fd5ad;
   --ng:#b4281f; --ng-bg:#fde4e1; --ng-line:#f0a9a2;
   --hlx:#0e7f84; --hly:#d4560f;
-  --axis:#7f8fa8; --circle:#2a3f66; --circle-fill:#f3f8ff;
+  --axis:#a68698; --circle:#5a2a48; --circle-fill:#fff8fb;
   --font-ui:'Zen Maru Gothic',system-ui,'Hiragino Maru Gothic ProN','Yu Gothic',sans-serif;
   --font-math:'STIX Two Text','Times New Roman','Hiragino Mincho ProN','Yu Mincho',serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0e1626; --surface:#162239; --ink:#e9f0ff; --muted:#9db0cf; --line:#2a3d60;
-    --accent:#6ea0ff; --accent-ink:#0b1424; --on-choice:#cfe0ff;
-    --choice:#1d3150; --choice-hover:#264168; --choice-line:#34517d;
+    --bg:#2a1020; --surface:#3a1830; --ink:#ffe9f2; --muted:#e0b3c8; --line:#5e2a48;
+    --accent:#ff8fb8; --accent-ink:#3a0f24; --soft:#52223f; --soft-ink:#ffc2d9;
+    --on-choice:#cfe0ff; --choice:#1d3150; --choice-hover:#264168; --choice-line:#34517d;
     --ok:#6fdc9f; --ok-bg:#123826; --ok-line:#2d7a53;
-    --ng:#ff9a90; --ng-bg:#3d1b1c; --ng-line:#8a3a37;
+    --ng:#ff9a90; --ng-bg:#4a1c1c; --ng-line:#8a3a37;
     --hlx:#5dd6d0; --hly:#ffa05c;
-    --axis:#7184a3; --circle:#9fb8e6; --circle-fill:#121d33;
+    --axis:#b58aa0; --circle:#ffc2d9; --circle-fill:#2e1226;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0e1626; --surface:#162239; --ink:#e9f0ff; --muted:#9db0cf; --line:#2a3d60;
-  --accent:#6ea0ff; --accent-ink:#0b1424; --on-choice:#cfe0ff;
-  --choice:#1d3150; --choice-hover:#264168; --choice-line:#34517d;
+  --bg:#2a1020; --surface:#3a1830; --ink:#ffe9f2; --muted:#e0b3c8; --line:#5e2a48;
+  --accent:#ff8fb8; --accent-ink:#3a0f24; --soft:#52223f; --soft-ink:#ffc2d9;
+  --on-choice:#cfe0ff; --choice:#1d3150; --choice-hover:#264168; --choice-line:#34517d;
   --ok:#6fdc9f; --ok-bg:#123826; --ok-line:#2d7a53;
-  --ng:#ff9a90; --ng-bg:#3d1b1c; --ng-line:#8a3a37;
+  --ng:#ff9a90; --ng-bg:#4a1c1c; --ng-line:#8a3a37;
   --hlx:#5dd6d0; --hly:#ffa05c;
-  --axis:#7184a3; --circle:#9fb8e6; --circle-fill:#121d33;
+  --axis:#b58aa0; --circle:#ffc2d9; --circle-fill:#2e1226;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:16px;line-height:1.6;padding-block:20px 44px}
-.wrap{max-width:680px;margin-inline:auto;padding-inline:16px;display:flex;flex-direction:column;gap:14px}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:18px;line-height:1.6;padding-block:18px 48px}
+.wrap{max-width:700px;margin-inline:auto;padding-inline:16px;display:flex;flex-direction:column;gap:14px}
 button{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 
 .top{display:flex;gap:12px;align-items:center}
 .top>div{min-width:0}
-.logo{width:46px;height:46px;flex:none;color:var(--accent)}
-h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02em}
-.top p{margin:2px 0 0;color:var(--muted);font-size:.86rem}
+.logo{width:50px;height:50px;flex:none;color:var(--accent)}
+h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02em}
+.top p{margin:2px 0 0;color:var(--muted);font-size:.9rem;line-height:1.45}
 
-.panel,.card{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.panel,.card{background:var(--surface);border:1.5px solid var(--line);border-radius:18px}
 .panel{padding:14px;display:flex;flex-direction:column;gap:12px}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.lab{font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;min-width:3.6rem}
-.seg{display:flex;flex-wrap:wrap;gap:6px;flex:1;min-width:0}
-.seg button{background:var(--choice);color:var(--on-choice);border:1.5px solid var(--choice-line);border-radius:10px;padding:7px 12px;min-height:40px;font-weight:700;cursor:pointer}
+.lab{font-size:.85rem;font-weight:700;color:var(--soft-ink);letter-spacing:.06em;min-width:3.4rem}
+.seg{display:flex;flex-wrap:wrap;gap:8px;flex:1;min-width:0}
+.seg button{background:var(--choice);color:var(--on-choice);border:2px solid var(--choice-line);border-radius:12px;padding:8px 14px;min-height:48px;font-size:1rem;font-weight:700;cursor:pointer}
 .seg button:hover{background:var(--choice-hover)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .seg.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
-.seg.steps button{display:flex;flex-direction:column;align-items:center;line-height:1.25;padding:6px 4px}
-.seg.steps small{font-size:.74rem;font-weight:500}
+.seg.steps button{display:flex;flex-direction:column;align-items:center;line-height:1.3;padding:7px 4px}
+.seg.steps small{font-size:.8rem;font-weight:500}
 .row.steprow{align-items:flex-start}
 
 .card{padding:18px}
-.meta{display:flex;justify-content:space-between;align-items:center;font-size:.86rem;font-weight:700;color:var(--muted)}
-.chip{background:var(--choice);color:var(--on-choice);border-radius:999px;padding:2px 12px}
-.bar{height:6px;border-radius:99px;background:var(--choice);margin-top:8px;overflow:hidden}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:.95rem;font-weight:700;color:var(--muted)}
+.chip{background:var(--soft);color:var(--soft-ink);border-radius:999px;padding:2px 14px}
+.bar{height:8px;border-radius:99px;background:var(--soft);margin-top:8px;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
 @media (prefers-reduced-motion:no-preference){.bar i{transition:width .3s ease}}
-.qlabel{margin:16px 0 0;text-align:center;font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--on-choice)}
+.qlabel{margin:16px 0 0;text-align:center;font-size:.92rem;font-weight:700;letter-spacing:.06em;color:var(--soft-ink)}
 .rep{display:inline-block;margin-right:.6em;padding:0 10px;border-radius:99px;background:var(--ng-bg);color:var(--ng);border:1px solid var(--ng-line);letter-spacing:.04em}
-.q{font-family:var(--font-math);font-size:clamp(2rem,9vw,2.8rem);text-align:center;line-height:1.3;padding:6px 0 18px;overflow-wrap:anywhere}
-.blank{display:inline-block;min-width:1.6em;border-bottom:3px solid var(--accent);color:var(--accent);line-height:1.1;margin-inline:.1em}
+.q{font-family:var(--font-math);font-size:clamp(2.4rem,11.5vw,3.5rem);text-align:center;line-height:1.3;padding:6px 0 18px;overflow-wrap:anywhere}
+.blank{display:inline-block;min-width:1.6em;border-bottom:4px solid var(--accent);color:var(--accent);line-height:1.1;margin-inline:.1em}
 
-.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.choice{display:flex;align-items:center;gap:8px;min-height:78px;padding:10px 12px;background:var(--choice);color:var(--ink);border:2px solid var(--choice-line);border-radius:14px;cursor:pointer;text-align:center}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.choice{display:flex;align-items:center;gap:6px;min-height:92px;padding:10px 10px;background:var(--choice);color:var(--ink);border:2.5px solid var(--choice-line);border-radius:16px;cursor:pointer;text-align:center}
 .choice:hover:not(:disabled){background:var(--choice-hover)}
-.choice .no{flex:none;width:1.5rem;font-size:1rem;color:var(--on-choice);opacity:.85}
-.choice .val{flex:1;min-width:0;font-family:var(--font-math);font-size:1.65rem;line-height:1.25}
+.choice .no{flex:none;width:1.6rem;font-size:1.1rem;color:var(--on-choice);opacity:.85}
+.choice .val{flex:1;min-width:0;font-family:var(--font-math);font-size:clamp(1.8rem,8.5vw,2.3rem);line-height:1.25}
 .choice:disabled{cursor:default}
 .choice.is-ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ink)}
 .choice.is-ok .no{color:var(--ok);opacity:1;font-weight:900}
 .choice.is-ng{background:var(--ng-bg);border-color:var(--ng);color:var(--ink)}
 .choice.is-ng .no{color:var(--ng);opacity:1;font-weight:900}
 .choice.is-dim{opacity:.55}
+.und{font-family:var(--font-ui);font-size:.58em;font-weight:700;line-height:1.3;display:inline-block}
 
-.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center}
-.actions .btn{padding:8px 14px;font-size:.92rem}
-.hlabel{font-size:.8rem;font-weight:700;color:var(--muted);letter-spacing:.06em}
-.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:10px 20px;min-height:44px;font-weight:700;cursor:pointer}
-.btn.ghost{background:var(--choice);color:var(--on-choice);border:1.5px solid var(--choice-line)}
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px}
+.hlabel{grid-column:1/-1;font-size:.85rem;font-weight:700;color:var(--soft-ink);letter-spacing:.06em}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:14px;padding:10px 20px;min-height:50px;font-size:1.05rem;font-weight:700;cursor:pointer}
+.btn.ghost{background:var(--choice);color:var(--on-choice);border:2px solid var(--choice-line)}
 .btn.ghost:hover{background:var(--choice-hover)}
 .btn.ghost[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.snd{margin-left:auto;flex:none;min-height:38px;padding:6px 12px;font-size:.85rem}
+.actions .btn{padding:8px 10px;font-size:.98rem;line-height:1.35}
+.snd{margin-left:auto;flex:none;min-height:42px;padding:6px 12px;font-size:.9rem}
 
-.hint{margin-top:14px;padding:12px;border-radius:12px;background:var(--bg);border:1.5px dashed var(--choice-line)}
-.hint .tip{margin:0 0 8px;font-size:.92rem}
-.hint .note{margin:6px 0 0;font-size:.8rem;color:var(--muted);display:flex;gap:4px 14px;flex-wrap:wrap}
+.hint{margin-top:14px;padding:12px;border-radius:14px;background:var(--bg);border:2px dashed var(--line)}
+.hint .tip{margin:0 0 8px;font-size:1rem}
+.hint .note{margin:6px 0 0;font-size:.88rem;color:var(--muted);display:flex;gap:4px 14px;flex-wrap:wrap}
 .hint .note .kx{color:var(--hlx);font-weight:700}
 .hint .note .ky{color:var(--hly);font-weight:700}
 .uc{width:100%;height:auto;display:block}
 .uc .u-circ{fill:var(--circle-fill);stroke:var(--circle);stroke-width:2.5}
 .uc .u-ax{stroke:var(--axis);stroke-width:1.5}
-.uc .u-sp{stroke:var(--axis);stroke-width:1;stroke-dasharray:3 4;opacity:.7}
+.uc .u-sp{stroke:var(--axis);stroke-width:1;stroke-dasharray:3 4;opacity:.75}
 .uc .u-tk{stroke:var(--circle);stroke-width:2.5}
 .uc .u-dot{fill:var(--circle)}
 .uc .u-dot.on{fill:var(--accent)}
@@ -113,20 +114,20 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
 .uc .u-hy{stroke:var(--hly);stroke-width:5;stroke-linecap:round}
 .uc .u-hx{stroke:var(--hlx);stroke-width:5;stroke-linecap:round}
 .uc text{font-family:var(--font-math);fill:var(--ink)}
-.uc .u-rad{font-size:18px;font-weight:700}
+.uc .u-rad{font-size:22px;font-weight:700}
 .uc .u-rad.on{fill:var(--accent)}
-.uc .u-co{font-size:14px;fill:var(--muted)}
+.uc .u-co{font-size:17px;fill:var(--muted)}
 .uc .u-co .hx{fill:var(--hlx);font-weight:700}
 .uc .u-co .hy{fill:var(--hly);font-weight:700}
-.uc .u-deg{font-size:12.5px;fill:var(--muted);paint-order:stroke;stroke:var(--circle-fill);stroke-width:4px;stroke-linejoin:round}
+.uc .u-deg{font-size:14.5px;fill:var(--muted);paint-order:stroke;stroke:var(--circle-fill);stroke-width:4px;stroke-linejoin:round}
 
-.fb{margin-top:14px;padding:12px 14px;border-radius:12px;border:1.5px solid}
+.fb{margin-top:14px;padding:14px 16px;border-radius:14px;border:2px solid}
 .fb.ok{background:var(--ok-bg);border-color:var(--ok-line)}
 .fb.ng{background:var(--ng-bg);border-color:var(--ng-line)}
-.fb .ft{margin:0;font-weight:900;font-size:1.05rem}
+.fb .ft{margin:0;font-weight:900;font-size:1.25rem}
 .fb.ok .ft{color:var(--ok)} .fb.ng .ft{color:var(--ng)}
-.fb .ex{margin:4px 0 8px;font-size:.95rem}
-.fb .nt{margin:0 0 12px;font-size:.85rem;color:var(--muted)}
+.fb .ex{margin:4px 0 8px;font-size:1.05rem}
+.fb .nt{margin:0 0 12px;font-size:.95rem;color:var(--muted)}
 
 .m{font-family:var(--font-math);font-size:1.12em;white-space:nowrap}
 .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;margin-inline:.12em}
@@ -135,14 +136,14 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
 .sqrt{white-space:nowrap}
 .sqrt .rd{border-top:.07em solid currentColor;padding:0 .06em;margin-left:.02em}
 
-.res-label{margin:0;font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--muted)}
-.res-score{margin:0;font-family:var(--font-math);font-size:3.4rem;line-height:1.2;font-weight:700}
-.res-score small{font-size:1.4rem;color:var(--muted)}
-.res-msg{margin:4px 0 12px}
+.res-label{margin:0;font-size:.9rem;font-weight:700;letter-spacing:.06em;color:var(--soft-ink)}
+.res-score{margin:0;font-family:var(--font-math);font-size:4rem;line-height:1.2;font-weight:700;color:var(--accent)}
+.res-score small{font-size:1.6rem;color:var(--muted)}
+.res-msg{margin:4px 0 12px;font-size:1.1rem}
 .wlist{display:flex;flex-direction:column;gap:6px;margin:0 0 14px;padding:0;list-style:none}
-.wlist li{background:var(--ng-bg);border:1px solid var(--ng-line);border-radius:10px;padding:6px 12px;font-family:var(--font-math);font-size:1.25rem}
+.wlist li{background:var(--ng-bg);border:1px solid var(--ng-line);border-radius:10px;padding:6px 12px;font-family:var(--font-math);font-size:1.45rem}
 .res-actions{display:flex;gap:10px;flex-wrap:wrap}
-.res-sub{font-size:.8rem;color:var(--muted);margin:0 0 12px}
+.res-sub{font-size:.9rem;color:var(--muted);margin:0 0 12px}
 #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
 </style>
 
@@ -188,17 +189,17 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
     <div class="q" id="qText"></div>
     <div class="choices" id="choices"></div>
     <div class="actions">
-      <span class="hlabel">ヒント</span>
+      <span class="hlabel">ヒント（もう一度押すと閉じます）</span>
       <button type="button" class="btn ghost" id="hintPlain" aria-pressed="false">単位円（数字・文字なし）</button>
       <button type="button" class="btn ghost" id="hintFull" aria-pressed="false">単位円（数字・文字あり）</button>
     </div>
-    <div class="hint" id="hintPanel" hidden></div>
     <div class="fb" id="fb" hidden role="status" aria-live="polite">
       <p class="ft" id="fbTitle"></p>
       <p class="ex" id="fbEx"></p>
       <p class="nt" id="fbNote"></p>
       <button type="button" class="btn" id="nextBtn">次の問題へ</button>
     </div>
+    <div class="hint" id="hintPanel" hidden></div>
   </section>
 
   <section class="card" id="result" hidden aria-label="結果">
@@ -230,11 +231,11 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
     if(trig && range!==1) a.unshift(0);
     return a;
   }
-  var SIN={0:'0',30:'1/2',45:'r2/2',60:'r3/2',90:'1',120:'r3/2',135:'r2/2',150:'1/2',180:'0',210:'-1/2',225:'-r2/2',240:'-r3/2',270:'-1',300:'-r3/2',315:'-r2/2',330:'-1/2',360:'0'};
-  var COS={0:'1',30:'r3/2',45:'r2/2',60:'1/2',90:'0',120:'-1/2',135:'-r2/2',150:'-r3/2',180:'-1',210:'-r3/2',225:'-r2/2',240:'-1/2',270:'0',300:'1/2',315:'r2/2',330:'r3/2',360:'1'};
+  var SIN={0:'0',30:'1/2',45:'1/r2',60:'r3/2',90:'1',120:'r3/2',135:'1/r2',150:'1/2',180:'0',210:'-1/2',225:'-1/r2',240:'-r3/2',270:'-1',300:'-r3/2',315:'-1/r2',330:'-1/2',360:'0'};
+  var COS={0:'1',30:'r3/2',45:'1/r2',60:'1/2',90:'0',120:'-1/2',135:'-1/r2',150:'-r3/2',180:'-1',210:'-r3/2',225:'-1/r2',240:'-1/2',270:'0',300:'1/2',315:'1/r2',330:'r3/2',360:'1'};
   var TAN={0:'0',30:'1/r3',45:'1',60:'r3',90:'N',120:'-r3',135:'-1',150:'-1/r3',180:'0',210:'1/r3',225:'1',240:'r3',270:'N',300:'-r3',315:'-1',330:'-1/r3',360:'0'};
   var TBL={sin:SIN,cos:COS,tan:TAN};
-  var POOLV={sin:['0','1','-1','1/2','-1/2','r2/2','-r2/2','r3/2','-r3/2'],tan:['0','1','-1','1/r3','-1/r3','r3','-r3','N']};
+  var POOLV={sin:['0','1','-1','1/2','-1/2','1/r2','-1/r2','r3/2','-r3/2'],tan:['0','1','-1','1/r3','-1/r3','r3','-r3','N']};
   POOLV.cos=POOLV.sin;
 
   /* ---------- 表示用の整形 ---------- */
@@ -244,16 +245,18 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
   function radParts(deg){var g=gcd(deg,180);return {n:deg/g,d:180/g}}
   function radHTML(deg){
     if(deg===0) return '0';
-    var p=radParts(deg), top=(p.n===1?'':p.n)+'π';
-    return p.d===1?top:frac(top,p.d);
+    var p=radParts(deg);
+    return p.d===1?(p.n===1?'':p.n)+'π':piFrac(p.n,p.d);
   }
+  /* πは分数の横棒の右どなりに置く（例：3/4 の右に π） */
+  function piFrac(n,d){return frac(n,d)+'π'}
   function radText(a){
     if(a===0) return '0, 2π';
     var p=radParts(a);
-    return (p.n===1?'':p.n)+'π'+(p.d>1?'/'+p.d:'');
+    return (p.d>1?p.n+'/'+p.d:(p.n===1?'':p.n))+'π';
   }
   function tokHTML(t){
-    if(t==='N') return '定義できない';
+    if(t==='N') return '<span class="und">定義できない</span>';
     var neg=t.charAt(0)==='-'; if(neg) t=t.slice(1);
     var part=function(x){return x.charAt(0)==='r'?sq(x.slice(1)):x};
     var body=t.indexOf('/')>=0?(function(){var ab=t.split('/');return frac(part(ab[0]),part(ab[1]))})():part(t);
@@ -306,11 +309,11 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
     g.connect(c.destination);
     o.start(t1); o.stop(t1+d+0.05);
   }
-  function sfxOk(){ /* ピンポン ピンポン */
+  function sfxOk(){ /* ピンポーン（高い「ピン」→ 低くのびる「ポーン」） */
     var c=ac(); if(!c) return;
-    [[1319,0,.22],[988,.14,.34],[1319,.52,.22],[988,.66,.4]].forEach(function(n){
-      note(c,n[0],n[1],n[2],'sine',.3);
-      note(c,n[0]*2,n[1],n[2]*.6,'sine',.07);
+    [[1319,0,.22],[988,.17,1.05]].forEach(function(n){
+      note(c,n[0],n[1],n[2],'sine',.32);
+      note(c,n[0]*2,n[1],n[2]*.55,'sine',.07);
     });
   }
   function sfxNg(){ /* ブッ ブー */
@@ -411,7 +414,7 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
         q.prompt=deg+'° ＝ <span class="blank">？</span>';
         q.ans=radHTML(deg);
         q.sum=deg+'° ＝ '+radHTML(deg);
-        q.expl='1° ＝ '+M(frac('π',180))+' なので、'+M(deg+'° × '+frac('π',180)+' ＝ '+frac(deg+'π',180)+' ＝ '+radHTML(deg));
+        q.expl='1° ＝ '+M(piFrac(1,180))+' なので、'+M(deg+'° × '+piFrac(1,180)+' ＝ '+piFrac(deg,180)+' ＝ '+radHTML(deg));
         ch=assemble({html:radHTML(deg),ok:true},convDis('d2r',deg,pool).map(function(x){return {html:radHTML(x),ok:false}}));
       }else{
         q.label='弧度法 → 度数法';
@@ -474,7 +477,7 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
     var R=150, RAD=Math.PI/180, trig=mode==='trig', hlA=hl===360?0:hl;
     var r1=function(v){return Math.round(v*10)/10};
     var P=function(a){return [R*Math.cos(a*RAD),-R*Math.sin(a*RAD)]};
-    var s='<svg class="uc" viewBox="-280 -218 560 436" role="img" aria-label="単位円">';
+    var s='<svg class="uc" viewBox="-285 -226 570 452" role="img" aria-label="単位円">';
     s+='<circle class="u-circ" r="'+R+'"/>';
     ANG.forEach(function(a){var p=P(a);s+='<line class="u-sp" x1="0" y1="0" x2="'+r1(p[0])+'" y2="'+r1(p[1])+'"/>'});
     s+='<line class="u-ax" x1="'+(-R-10)+'" y1="0" x2="'+(R+10)+'" y2="0"/><line class="u-ax" x1="0" y1="'+(-R-10)+'" x2="0" y2="'+(R+10)+'"/>';
@@ -501,17 +504,17 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
       var c=Math.cos(a*RAD), sn=Math.sin(a*RAD), on=trig&&a===hlA;
       var lx=r1((R+17)*c), ly=r1(-(R+17)*sn);
       var an=c>0.3?'start':(c<-0.3?'end':'middle'), top=sn>0.9, bot=sn<-0.9, y1, y2;
-      if(trig){ if(top){y1=ly-20;y2=ly-4}else if(bot){y1=ly+17;y2=ly+33}else{y1=ly-1;y2=ly+16} }
-      else y1=top?ly-5:(bot?ly+17:ly+6);
+      if(trig){ if(top){y1=ly-24;y2=ly-6}else if(bot){y1=ly+21;y2=ly+41}else{y1=ly-2;y2=ly+19} }
+      else y1=top?ly-6:(bot?ly+22:ly+7);
       s+='<text class="u-rad'+(on?' on':'')+'" x="'+lx+'" y="'+y1+'" text-anchor="'+an+'">'+radText(a)+'</text>';
       if(trig){
         var hx=on&&(fn==='cos'||fn==='tan'), hy=on&&(fn==='sin'||fn==='tan');
         s+='<text class="u-co" x="'+lx+'" y="'+y2+'" text-anchor="'+an+'">(<tspan class="'+(hx?'hx':'')+'">'+tokText(COS[a])+'</tspan>, <tspan class="'+(hy?'hy':'')+'">'+tokText(SIN[a])+'</tspan>)</text>';
       }
       var dx,dy,da='middle';
-      if(a===0){dx=R-9;dy=4;da='end'}
-      else if(a===180){dx=-(R-9);dy=4;da='start'}
-      else{dx=r1((R-28)*c);dy=r1(-(R-28)*sn+4)}
+      if(a===0){dx=R-9;dy=5;da='end'}
+      else if(a===180){dx=-(R-9);dy=5;da='start'}
+      else{dx=r1((R-29)*c);dy=r1(-(R-29)*sn+5)}
       s+='<text class="u-deg" x="'+dx+'" y="'+dy+'" text-anchor="'+da+'">'+(a===0?'0°=360°':a+'°')+'</text>';
     });
     return s+'</svg>';
@@ -521,8 +524,8 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
     var h=q.hint, tip, note;
     if(h.mode==='conv'){
       tip=h.dir==='d2r'
-        ? '<b>180° ＝ π</b>（半円）、<b>360° ＝ 2π</b>（1周）。だから <b>1° ＝ '+frac('π',180)+'</b>。度の数に '+frac('π',180)+' をかけて約分しよう。'
-        : '<b>π ＝ 180°</b> に置きかえよう。たとえば '+frac('π',4)+' なら 180° ÷ 4 ＝ 45°。';
+        ? '<b>180° ＝ π</b>（半円）、<b>360° ＝ 2π</b>（1周）。だから <b>1° ＝ '+piFrac(1,180)+'</b>。度の数に '+piFrac(1,180)+' をかけて約分しよう。'
+        : '<b>π ＝ 180°</b> に置きかえよう。たとえば '+piFrac(1,4)+' なら 180° ÷ 4 ＝ 45°。';
       note='<span>外側：ラジアン（弧度法）</span><span>内側：度（度数法）</span>';
     }else{
       tip={sin:'<b>sin θ</b> は、単位円周上の点の <b>y座標</b>（たて）。',
@@ -546,9 +549,16 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
     sb.setAttribute('aria-pressed',String(soundOn));
     sb.textContent=soundOn?'音 ON':'音 OFF';
   }
-  function setHintBtns(){
+  /* ヒントの単位円は、ボタンをもう一度押すまで出しっぱなし（次の問題でも表示を続ける） */
+  function renderHint(){
+    var q=ST.qs[ST.i], hp=$('#hintPanel');
     $('#hintPlain').setAttribute('aria-pressed',String(ST.hintMode==='plain'));
     $('#hintFull').setAttribute('aria-pressed',String(ST.hintMode==='full'));
+    if(ST.hintMode&&q){
+      q.hinted=true;
+      hp.innerHTML=hintHTML(q,ST.hintMode==='full');
+      hp.hidden=false;
+    }else{hp.hidden=true;hp.innerHTML=''}
   }
   function clearTimer(){if(ST.timer){clearTimeout(ST.timer);ST.timer=null}}
 
@@ -561,7 +571,7 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
   }
   function showQ(){
     var q=ST.qs[ST.i];
-    ST.answered=false;ST.hintMode=null;
+    ST.answered=false;
     $('#qNo').textContent='第 '+(ST.i+1)+' 問 / '+ST.qs.length;
     $('#scoreChip').textContent='正解 '+ST.score;
     $('#barFill').style.width=(ST.i/ST.qs.length*100)+'%';
@@ -575,8 +585,12 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
       b.addEventListener('click',function(){answer(idx)});
       box.appendChild(b);
     });
-    $('#hintPanel').hidden=true;$('#fb').hidden=true;
-    setHintBtns();
+    $('#fb').hidden=true;
+    renderHint();
+    try{ /* 単位円を開いたままでも、新しい問題が見えるようにもどす */
+      var top=$('#quiz').getBoundingClientRect().top;
+      if(top<0) $('#quiz').scrollIntoView({block:'start'});
+    }catch(e){}
   }
   function answer(idx){
     if(ST.answered) return;
@@ -597,7 +611,7 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
       $('#fbTitle').textContent='せいかい！';
       $('#fbEx').hidden=true;$('#fbNote').hidden=true;$('#nextBtn').hidden=true;
       fb.hidden=false;
-      ST.timer=setTimeout(next,1300);
+      ST.timer=setTimeout(next,1500);
     }else{
       ST.mistakes++;ST.wrong.push(q);
       sfxNg();
@@ -639,7 +653,7 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
       ?'パーフェクト！ぜんぶ正解！次のステップに進もう。'
       :'まちがえた '+uniq.length+' 問は、ふくしゅうでもう一度やったよ。もう一度チャレンジしよう。';
     var hc=ST.qs.filter(function(q){return q.hinted&&!q.rep}).length;
-    $('#resHints').textContent=hc?'ヒントを見た問題：'+hc+' 問':'ヒントなしで解きました。';
+    $('#resHints').textContent=hc?'ヒントの単位円を出していた問題：'+hc+' 問':'ヒントなしで解きました。';
     var ul=$('#resWrong');ul.innerHTML='';
     uniq.forEach(function(q){var li=document.createElement('li');li.innerHTML=q.sum;ul.appendChild(li)});
     var bw=$('#btnWrong');bw.hidden=!uniq.length;
@@ -651,11 +665,8 @@ h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02
     if(perfect) setTimeout(function(){sfxFan();confetti()},250);
   }
   function setHint(m){
-    var q=ST.qs[ST.i], hp=$('#hintPanel');
     ST.hintMode=ST.hintMode===m?null:m;
-    if(ST.hintMode){q.hinted=true;hp.innerHTML=hintHTML(q,ST.hintMode==='full')}
-    hp.hidden=!ST.hintMode;
-    setHintBtns();
+    renderHint();
   }
 
   /* ---------- イベント ---------- */
