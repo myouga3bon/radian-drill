@@ -1,0 +1,686 @@
+<title>弧度法ドリル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@500;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: 1カラム(最大680px) 設定パネル → 問題カード(選択肢2x2・ヒント・解説) → 結果。
+   色は薄いブルーを「未選択」の標準にし、選択・正解・不正解だけ色を変える。 */
+:root{
+  --bg:#f2f7fd; --surface:#ffffff; --ink:#14213d; --muted:#586987; --line:#cfe0f5;
+  --accent:#2563eb; --accent-ink:#ffffff; --on-choice:#1b3f95;
+  --choice:#e4f0ff; --choice-hover:#d3e6ff; --choice-line:#b9d5f7;
+  --ok:#157347; --ok-bg:#dcf5e7; --ok-line:#8fd5ad;
+  --ng:#b4281f; --ng-bg:#fde4e1; --ng-line:#f0a9a2;
+  --hlx:#0e7f84; --hly:#d4560f;
+  --axis:#7f8fa8; --circle:#2a3f66; --circle-fill:#f3f8ff;
+  --font-ui:'Zen Maru Gothic',system-ui,'Hiragino Maru Gothic ProN','Yu Gothic',sans-serif;
+  --font-math:'STIX Two Text','Times New Roman','Hiragino Mincho ProN','Yu Mincho',serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1626; --surface:#162239; --ink:#e9f0ff; --muted:#9db0cf; --line:#2a3d60;
+    --accent:#6ea0ff; --accent-ink:#0b1424; --on-choice:#cfe0ff;
+    --choice:#1d3150; --choice-hover:#264168; --choice-line:#34517d;
+    --ok:#6fdc9f; --ok-bg:#123826; --ok-line:#2d7a53;
+    --ng:#ff9a90; --ng-bg:#3d1b1c; --ng-line:#8a3a37;
+    --hlx:#5dd6d0; --hly:#ffa05c;
+    --axis:#7184a3; --circle:#9fb8e6; --circle-fill:#121d33;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1626; --surface:#162239; --ink:#e9f0ff; --muted:#9db0cf; --line:#2a3d60;
+  --accent:#6ea0ff; --accent-ink:#0b1424; --on-choice:#cfe0ff;
+  --choice:#1d3150; --choice-hover:#264168; --choice-line:#34517d;
+  --ok:#6fdc9f; --ok-bg:#123826; --ok-line:#2d7a53;
+  --ng:#ff9a90; --ng-bg:#3d1b1c; --ng-line:#8a3a37;
+  --hlx:#5dd6d0; --hly:#ffa05c;
+  --axis:#7184a3; --circle:#9fb8e6; --circle-fill:#121d33;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:16px;line-height:1.6;padding-block:20px 44px}
+.wrap{max-width:680px;margin-inline:auto;padding-inline:16px;display:flex;flex-direction:column;gap:14px}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.top{display:flex;gap:12px;align-items:center}
+.top>div{min-width:0}
+.logo{width:46px;height:46px;flex:none;color:var(--accent)}
+h1{margin:0;font-size:1.65rem;font-weight:900;line-height:1.2;letter-spacing:.02em}
+.top p{margin:2px 0 0;color:var(--muted);font-size:.86rem}
+
+.panel,.card{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.panel{padding:14px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.lab{font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;min-width:3.6rem}
+.seg{display:flex;flex-wrap:wrap;gap:6px;flex:1;min-width:0}
+.seg button{background:var(--choice);color:var(--on-choice);border:1.5px solid var(--choice-line);border-radius:10px;padding:7px 12px;min-height:40px;font-weight:700;cursor:pointer}
+.seg button:hover{background:var(--choice-hover)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.seg.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.seg.steps button{display:flex;flex-direction:column;align-items:center;line-height:1.25;padding:6px 4px}
+.seg.steps small{font-size:.74rem;font-weight:500}
+.row.steprow{align-items:flex-start}
+
+.card{padding:18px}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:.86rem;font-weight:700;color:var(--muted)}
+.chip{background:var(--choice);color:var(--on-choice);border-radius:999px;padding:2px 12px}
+.bar{height:6px;border-radius:99px;background:var(--choice);margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .3s ease}}
+.qlabel{margin:16px 0 0;text-align:center;font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--on-choice)}
+.rep{display:inline-block;margin-right:.6em;padding:0 10px;border-radius:99px;background:var(--ng-bg);color:var(--ng);border:1px solid var(--ng-line);letter-spacing:.04em}
+.q{font-family:var(--font-math);font-size:clamp(2rem,9vw,2.8rem);text-align:center;line-height:1.3;padding:6px 0 18px;overflow-wrap:anywhere}
+.blank{display:inline-block;min-width:1.6em;border-bottom:3px solid var(--accent);color:var(--accent);line-height:1.1;margin-inline:.1em}
+
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.choice{display:flex;align-items:center;gap:8px;min-height:78px;padding:10px 12px;background:var(--choice);color:var(--ink);border:2px solid var(--choice-line);border-radius:14px;cursor:pointer;text-align:center}
+.choice:hover:not(:disabled){background:var(--choice-hover)}
+.choice .no{flex:none;width:1.5rem;font-size:1rem;color:var(--on-choice);opacity:.85}
+.choice .val{flex:1;min-width:0;font-family:var(--font-math);font-size:1.65rem;line-height:1.25}
+.choice:disabled{cursor:default}
+.choice.is-ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ink)}
+.choice.is-ok .no{color:var(--ok);opacity:1;font-weight:900}
+.choice.is-ng{background:var(--ng-bg);border-color:var(--ng);color:var(--ink)}
+.choice.is-ng .no{color:var(--ng);opacity:1;font-weight:900}
+.choice.is-dim{opacity:.55}
+
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.actions .btn{padding:8px 14px;font-size:.92rem}
+.hlabel{font-size:.8rem;font-weight:700;color:var(--muted);letter-spacing:.06em}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:10px 20px;min-height:44px;font-weight:700;cursor:pointer}
+.btn.ghost{background:var(--choice);color:var(--on-choice);border:1.5px solid var(--choice-line)}
+.btn.ghost:hover{background:var(--choice-hover)}
+.btn.ghost[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.snd{margin-left:auto;flex:none;min-height:38px;padding:6px 12px;font-size:.85rem}
+
+.hint{margin-top:14px;padding:12px;border-radius:12px;background:var(--bg);border:1.5px dashed var(--choice-line)}
+.hint .tip{margin:0 0 8px;font-size:.92rem}
+.hint .note{margin:6px 0 0;font-size:.8rem;color:var(--muted);display:flex;gap:4px 14px;flex-wrap:wrap}
+.hint .note .kx{color:var(--hlx);font-weight:700}
+.hint .note .ky{color:var(--hly);font-weight:700}
+.uc{width:100%;height:auto;display:block}
+.uc .u-circ{fill:var(--circle-fill);stroke:var(--circle);stroke-width:2.5}
+.uc .u-ax{stroke:var(--axis);stroke-width:1.5}
+.uc .u-sp{stroke:var(--axis);stroke-width:1;stroke-dasharray:3 4;opacity:.7}
+.uc .u-tk{stroke:var(--circle);stroke-width:2.5}
+.uc .u-dot{fill:var(--circle)}
+.uc .u-dot.on{fill:var(--accent)}
+.uc .u-hl{stroke:var(--accent);stroke-width:3.5;stroke-linecap:round}
+.uc .u-arc{fill:none;stroke:var(--accent);stroke-width:2.5}
+.uc .u-foot{stroke:var(--axis);stroke-width:1.5;stroke-dasharray:4 3}
+.uc .u-hy{stroke:var(--hly);stroke-width:5;stroke-linecap:round}
+.uc .u-hx{stroke:var(--hlx);stroke-width:5;stroke-linecap:round}
+.uc text{font-family:var(--font-math);fill:var(--ink)}
+.uc .u-rad{font-size:18px;font-weight:700}
+.uc .u-rad.on{fill:var(--accent)}
+.uc .u-co{font-size:14px;fill:var(--muted)}
+.uc .u-co .hx{fill:var(--hlx);font-weight:700}
+.uc .u-co .hy{fill:var(--hly);font-weight:700}
+.uc .u-deg{font-size:12.5px;fill:var(--muted);paint-order:stroke;stroke:var(--circle-fill);stroke-width:4px;stroke-linejoin:round}
+
+.fb{margin-top:14px;padding:12px 14px;border-radius:12px;border:1.5px solid}
+.fb.ok{background:var(--ok-bg);border-color:var(--ok-line)}
+.fb.ng{background:var(--ng-bg);border-color:var(--ng-line)}
+.fb .ft{margin:0;font-weight:900;font-size:1.05rem}
+.fb.ok .ft{color:var(--ok)} .fb.ng .ft{color:var(--ng)}
+.fb .ex{margin:4px 0 8px;font-size:.95rem}
+.fb .nt{margin:0 0 12px;font-size:.85rem;color:var(--muted)}
+
+.m{font-family:var(--font-math);font-size:1.12em;white-space:nowrap}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;margin-inline:.12em}
+.frac>span:first-child{border-bottom:.07em solid currentColor;padding:0 .22em .06em}
+.frac>span:last-child{padding-top:.06em}
+.sqrt{white-space:nowrap}
+.sqrt .rd{border-top:.07em solid currentColor;padding:0 .06em;margin-left:.02em}
+
+.res-label{margin:0;font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--muted)}
+.res-score{margin:0;font-family:var(--font-math);font-size:3.4rem;line-height:1.2;font-weight:700}
+.res-score small{font-size:1.4rem;color:var(--muted)}
+.res-msg{margin:4px 0 12px}
+.wlist{display:flex;flex-direction:column;gap:6px;margin:0 0 14px;padding:0;list-style:none}
+.wlist li{background:var(--ng-bg);border:1px solid var(--ng-line);border-radius:10px;padding:6px 12px;font-family:var(--font-math);font-size:1.25rem}
+.res-actions{display:flex;gap:10px;flex-wrap:wrap}
+.res-sub{font-size:.8rem;color:var(--muted);margin:0 0 12px}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+</style>
+
+<main class="wrap">
+  <header class="top">
+    <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 24H44M24 24L38.1 9.9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M34 24A10 10 0 0 0 31.07 16.93" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+    <div>
+      <h1>弧度法ドリル</h1>
+      <p>度数法と弧度法の変換、sin・cos・tan を、単位円を見ながら身につけよう</p>
+    </div>
+    <button type="button" class="btn ghost snd" id="sndBtn" aria-pressed="true">音 ON</button>
+  </header>
+
+  <section class="panel" aria-label="問題の設定">
+    <div class="row"><span class="lab">問題</span>
+      <div class="seg" id="segTab" role="group" aria-label="問題の種類">
+        <button type="button" data-v="conv" aria-pressed="true">角度の変換</button>
+        <button type="button" data-v="sin" aria-pressed="false">sin</button>
+        <button type="button" data-v="cos" aria-pressed="false">cos</button>
+        <button type="button" data-v="tan" aria-pressed="false">tan</button>
+        <button type="button" data-v="mix" aria-pressed="false">ミックス</button>
+      </div>
+    </div>
+    <div class="row" id="rowDir"><span class="lab">変換</span>
+      <div class="seg" id="segDir" role="group" aria-label="変換の向き">
+        <button type="button" data-v="d2r" aria-pressed="true">度数法 → 弧度法</button>
+        <button type="button" data-v="r2d" aria-pressed="false">弧度法 → 度数法</button>
+      </div>
+    </div>
+    <div class="row steprow"><span class="lab">範囲</span>
+      <div class="seg steps" id="segRange" role="group" aria-label="角度の範囲">
+        <button type="button" data-v="0" aria-pressed="true"><b>STEP 1</b><small>0°〜180°</small></button>
+        <button type="button" data-v="1" aria-pressed="false"><b>STEP 2</b><small>180°〜360°</small></button>
+        <button type="button" data-v="2" aria-pressed="false"><b>STEP 3</b><small>すべて</small></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="quiz" aria-label="問題">
+    <div class="meta"><span id="qNo">第 1 問</span><span class="chip" id="scoreChip">正解 0</span></div>
+    <div class="bar"><i id="barFill" style="width:0"></i></div>
+    <p class="qlabel" id="qLabel"></p>
+    <div class="q" id="qText"></div>
+    <div class="choices" id="choices"></div>
+    <div class="actions">
+      <span class="hlabel">ヒント</span>
+      <button type="button" class="btn ghost" id="hintPlain" aria-pressed="false">単位円（数字・文字なし）</button>
+      <button type="button" class="btn ghost" id="hintFull" aria-pressed="false">単位円（数字・文字あり）</button>
+    </div>
+    <div class="hint" id="hintPanel" hidden></div>
+    <div class="fb" id="fb" hidden role="status" aria-live="polite">
+      <p class="ft" id="fbTitle"></p>
+      <p class="ex" id="fbEx"></p>
+      <p class="nt" id="fbNote"></p>
+      <button type="button" class="btn" id="nextBtn">次の問題へ</button>
+    </div>
+  </section>
+
+  <section class="card" id="result" hidden aria-label="結果">
+    <p class="res-label">結果（最初に正解した問題の数）</p>
+    <p class="res-score"><span id="resScore">0</span><small id="resOf"> / 10</small></p>
+    <p class="res-msg" id="resMsg"></p>
+    <p class="res-sub" id="resHints"></p>
+    <ul class="wlist" id="resWrong"></ul>
+    <div class="res-actions">
+      <button type="button" class="btn" id="btnAgain">もう一度</button>
+      <button type="button" class="btn ghost" id="btnWrong" hidden>まちがえた問題だけ</button>
+      <button type="button" class="btn ghost" id="btnNext" hidden></button>
+    </div>
+  </section>
+</main>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var gcd=function(a,b){return b?gcd(b,a%b):a};
+  var shuffle=function(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a};
+
+  /* ---------- 角度データ ---------- */
+  var R1=[30,45,60,90,120,135,150,180], R2=[210,225,240,270,300,315,330,360];
+  var ANG=[0,30,45,60,90,120,135,150,180,210,225,240,270,300,315,330];
+  function anglesFor(range,trig){
+    var a=range===0?R1.slice():range===1?R2.slice():R1.concat(R2);
+    if(trig && range!==1) a.unshift(0);
+    return a;
+  }
+  var SIN={0:'0',30:'1/2',45:'r2/2',60:'r3/2',90:'1',120:'r3/2',135:'r2/2',150:'1/2',180:'0',210:'-1/2',225:'-r2/2',240:'-r3/2',270:'-1',300:'-r3/2',315:'-r2/2',330:'-1/2',360:'0'};
+  var COS={0:'1',30:'r3/2',45:'r2/2',60:'1/2',90:'0',120:'-1/2',135:'-r2/2',150:'-r3/2',180:'-1',210:'-r3/2',225:'-r2/2',240:'-1/2',270:'0',300:'1/2',315:'r2/2',330:'r3/2',360:'1'};
+  var TAN={0:'0',30:'1/r3',45:'1',60:'r3',90:'N',120:'-r3',135:'-1',150:'-1/r3',180:'0',210:'1/r3',225:'1',240:'r3',270:'N',300:'-r3',315:'-1',330:'-1/r3',360:'0'};
+  var TBL={sin:SIN,cos:COS,tan:TAN};
+  var POOLV={sin:['0','1','-1','1/2','-1/2','r2/2','-r2/2','r3/2','-r3/2'],tan:['0','1','-1','1/r3','-1/r3','r3','-r3','N']};
+  POOLV.cos=POOLV.sin;
+
+  /* ---------- 表示用の整形 ---------- */
+  function frac(n,d){return '<span class="frac"><span>'+n+'</span><span>'+d+'</span></span>'}
+  function sq(n){return '<span class="sqrt">√<span class="rd">'+n+'</span></span>'}
+  function M(h){return '<span class="m">'+h+'</span>'}
+  function radParts(deg){var g=gcd(deg,180);return {n:deg/g,d:180/g}}
+  function radHTML(deg){
+    if(deg===0) return '0';
+    var p=radParts(deg), top=(p.n===1?'':p.n)+'π';
+    return p.d===1?top:frac(top,p.d);
+  }
+  function radText(a){
+    if(a===0) return '0, 2π';
+    var p=radParts(a);
+    return (p.n===1?'':p.n)+'π'+(p.d>1?'/'+p.d:'');
+  }
+  function tokHTML(t){
+    if(t==='N') return '定義できない';
+    var neg=t.charAt(0)==='-'; if(neg) t=t.slice(1);
+    var part=function(x){return x.charAt(0)==='r'?sq(x.slice(1)):x};
+    var body=t.indexOf('/')>=0?(function(){var ab=t.split('/');return frac(part(ab[0]),part(ab[1]))})():part(t);
+    return (neg?'−':'')+body;
+  }
+  function tokText(t){
+    if(t==='N') return '定義できない';
+    var neg=t.charAt(0)==='-'; if(neg) t=t.slice(1);
+    return (neg?'−':'')+t.replace(/r/g,'√');
+  }
+
+  /* ---------- 状態 ---------- */
+  var ST={tab:'conv',dir:'d2r',range:0,qs:[],n:0,i:0,score:0,mistakes:0,answered:false,wrong:[],hintMode:null,timer:null};
+  var KEY='radian-drill-v1', soundOn=true;
+  try{var sv=JSON.parse(localStorage.getItem(KEY)||'{}');
+    if(['conv','sin','cos','tan','mix'].indexOf(sv.tab)>=0) ST.tab=sv.tab;
+    if(sv.dir==='d2r'||sv.dir==='r2d') ST.dir=sv.dir;
+    if(sv.range===0||sv.range===1||sv.range===2) ST.range=sv.range;
+    if(sv.sound===false) soundOn=false;
+  }catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({tab:ST.tab,dir:ST.dir,range:ST.range,sound:soundOn}))}catch(e){}}
+
+  /* 正解の位置が①〜④に偏らないよう、使用回数がいちばん少ない位置から選ぶ */
+  var posCount=[0,0,0,0];
+  function pickPos(){
+    var m=Math.min.apply(null,posCount), c=[];
+    for(var i=0;i<4;i++) if(posCount[i]===m) c.push(i);
+    var p=c[Math.floor(Math.random()*c.length)];
+    posCount[p]++; return p;
+  }
+
+  /* ---------- 効果音（Web Audio） ---------- */
+  var AC=null;
+  function ac(){
+    if(!soundOn) return null;
+    try{
+      if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)();
+      if(AC.state==='suspended') AC.resume();
+      return AC;
+    }catch(e){return null}
+  }
+  function note(c,f,t,d,type,v,lp){
+    var o=c.createOscillator(), g=c.createGain(), t1=c.currentTime+t;
+    o.type=type; o.frequency.setValueAtTime(f,t1);
+    g.gain.setValueAtTime(0.0001,t1);
+    g.gain.exponentialRampToValueAtTime(v,t1+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001,t1+d);
+    if(lp){var fl=c.createBiquadFilter();fl.type='lowpass';fl.frequency.value=lp;o.connect(fl);fl.connect(g)}
+    else o.connect(g);
+    g.connect(c.destination);
+    o.start(t1); o.stop(t1+d+0.05);
+  }
+  function sfxOk(){ /* ピンポン ピンポン */
+    var c=ac(); if(!c) return;
+    [[1319,0,.22],[988,.14,.34],[1319,.52,.22],[988,.66,.4]].forEach(function(n){
+      note(c,n[0],n[1],n[2],'sine',.3);
+      note(c,n[0]*2,n[1],n[2]*.6,'sine',.07);
+    });
+  }
+  function sfxNg(){ /* ブッ ブー */
+    var c=ac(); if(!c) return;
+    [[0,.16],[.26,.6]].forEach(function(n){
+      note(c,140,n[0],n[1],'sawtooth',.2,650);
+      note(c,147,n[0],n[1],'square',.1,500);
+    });
+  }
+  function sfxFan(){ /* ちゃらららん */
+    var c=ac(); if(!c) return;
+    var run=[523,659,784,1047,1319,1568];
+    run.forEach(function(f,i){note(c,f,i*.09,.2,'triangle',.22)});
+    var t=run.length*.09+.04;
+    [523,659,784,1047].forEach(function(f){note(c,f,t,1.3,'triangle',.15)});
+    note(c,2093,t,1,'sine',.05);
+  }
+
+  /* ---------- 花吹雪（ゆっくり落ちる） ---------- */
+  var CF={raf:0};
+  function stopConfetti(){
+    if(CF.raf){cancelAnimationFrame(CF.raf);CF.raf=0}
+    var cv=$('#confetti');
+    if(cv&&cv.getContext){var x=cv.getContext('2d');if(x) x.clearRect(0,0,cv.width,cv.height)}
+  }
+  function confetti(){
+    var cv=$('#confetti');
+    if(!cv||!cv.getContext) return;
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    stopConfetti();
+    var ctx=cv.getContext('2d'), dpr=window.devicePixelRatio||1, W=window.innerWidth, H=window.innerHeight;
+    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+    var cols=['#ef476f','#ffd166','#06d6a0','#118ab2','#8e6bf2','#ff9f1c','#4cc9f0','#f78fb3'];
+    var n=Math.min(150,Math.max(60,Math.round(W/7))), ps=[], i;
+    for(i=0;i<n;i++) ps.push({
+      x:Math.random()*W, y:-20-Math.random()*H*0.9,
+      w:6+Math.random()*7, h:9+Math.random()*9, c:cols[i%cols.length],
+      vy:38+Math.random()*42, vx:(Math.random()-.5)*24,
+      rot:Math.random()*6.28, vr:(Math.random()-.5)*2.4,
+      ph:Math.random()*6.28, sw:14+Math.random()*26
+    });
+    var t0=null, last=0;
+    function frame(ts){
+      if(t0===null){t0=ts;last=ts}
+      var dt=Math.min(.05,(ts-last)/1000), t=(ts-t0)/1000; last=ts;
+      ctx.clearRect(0,0,W,H);
+      var alive=0;
+      ps.forEach(function(p){
+        p.y+=p.vy*dt; p.x+=p.vx*dt+Math.sin(t*1.6+p.ph)*p.sw*dt; p.rot+=p.vr*dt;
+        if(p.y<H+30){
+          alive++;
+          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+          ctx.scale(1,Math.cos(t*2.2+p.ph)); /* ひらひら */
+          ctx.fillStyle=p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+          ctx.restore();
+        }
+      });
+      if(alive>0&&t<30) CF.raf=requestAnimationFrame(frame);
+      else{CF.raf=0;ctx.clearRect(0,0,W,H)}
+    }
+    CF.raf=requestAnimationFrame(frame);
+  }
+
+  /* ---------- 問題づくり ---------- */
+  function convDis(dir,deg,pool){
+    var sc=function(x){
+      var s=Math.random()*1.6;
+      if(dir==='d2r'){var a=radParts(deg),b=radParts(x); if(a.d===b.d)s+=2; if(a.n===b.n)s+=2;}
+      else s-=Math.abs(x-deg)/50;
+      return s;
+    };
+    return pool.filter(function(x){return x!==deg}).map(function(x){return {x:x,s:sc(x)}})
+      .sort(function(a,b){return b.s-a.s}).slice(0,3).map(function(o){return o.x});
+  }
+  function trigDis(fn,deg,correct){
+    var out=[];
+    var add=function(t){if(t&&t!==correct&&out.indexOf(t)<0&&POOLV[fn].indexOf(t)>=0) out.push(t)};
+    var flip=function(t){return (t==='0'||t==='N')?null:(t.charAt(0)==='-'?t.slice(1):'-'+t)};
+    add(flip(correct));
+    if(fn==='sin') add(COS[deg]); else if(fn==='cos') add(SIN[deg]);
+    else add({'1/r3':'r3','r3':'1/r3','-1/r3':'-r3','-r3':'-1/r3'}[correct]);
+    shuffle(POOLV[fn]).forEach(add);
+    return out.slice(0,3);
+  }
+  function assemble(correct,dis){
+    var arr=shuffle(dis), pos=pickPos();
+    arr.splice(pos,0,correct);
+    return arr;
+  }
+
+  function buildQ(item){
+    var q={item:item,rep:false}, deg=item.deg, ch;
+    if(item.type==='conv'){
+      var pool=anglesFor(ST.range,false);
+      var p=radParts(deg);
+      if(item.dir==='d2r'){
+        q.label='度数法 → 弧度法';
+        q.prompt=deg+'° ＝ <span class="blank">？</span>';
+        q.ans=radHTML(deg);
+        q.sum=deg+'° ＝ '+radHTML(deg);
+        q.expl='1° ＝ '+M(frac('π',180))+' なので、'+M(deg+'° × '+frac('π',180)+' ＝ '+frac(deg+'π',180)+' ＝ '+radHTML(deg));
+        ch=assemble({html:radHTML(deg),ok:true},convDis('d2r',deg,pool).map(function(x){return {html:radHTML(x),ok:false}}));
+      }else{
+        q.label='弧度法 → 度数法';
+        q.prompt=radHTML(deg)+' ＝ <span class="blank">？</span>°';
+        q.ans=deg+'°';
+        q.sum=radHTML(deg)+' ＝ '+deg+'°';
+        var how;
+        if(p.d===1&&p.n===1) how='π ＝ 180°';
+        else if(p.d===1) how='180° × '+p.n+' ＝ '+deg+'°';
+        else if(p.n===1) how='180° ÷ '+p.d+' ＝ '+deg+'°';
+        else how='180° × '+p.n+' ÷ '+p.d+' ＝ '+deg+'°';
+        q.expl='π ＝ 180° に置きかえて、'+M(radHTML(deg))+' ＝ '+M(how);
+        ch=assemble({html:deg+'°',ok:true},convDis('r2d',deg,pool).map(function(x){return {html:x+'°',ok:false}}));
+      }
+      q.hint={mode:'conv',dir:item.dir};
+    }else{
+      var fn=item.fn, tbl=TBL[fn], ans=tbl[deg];
+      q.label=fn+' の値を求めよう（弧度法）';
+      q.prompt=fn+' '+radHTML(deg)+' ＝ <span class="blank">？</span>';
+      q.ans=tokHTML(ans);
+      q.sum=fn+' '+radHTML(deg)+' ＝ '+tokHTML(ans);
+      var pt=M('( '+tokHTML(COS[deg])+' , '+tokHTML(SIN[deg])+' )');
+      var e=M(radHTML(deg))+' ＝ '+deg+'°。単位円で '+deg+'° の点は '+pt+'。';
+      if(fn==='sin') e+=' sin は y座標なので '+M(tokHTML(ans))+'。';
+      else if(fn==='cos') e+=' cos は x座標なので '+M(tokHTML(ans))+'。';
+      else if(ans==='N') e+=' tan ＝ y ÷ x だけど x ＝ 0 なので割れません。tan は<b>定義できない</b>。';
+      else{
+        var xs=COS[deg], xh=tokHTML(xs); if(xs.charAt(0)==='-') xh='( '+xh+' )';
+        e+=' tan ＝ y ÷ x ＝ '+M(tokHTML(SIN[deg])+' ÷ '+xh+' ＝ '+tokHTML(ans))+'。';
+      }
+      q.expl=e;
+      ch=assemble({html:tokHTML(ans),ok:true},trigDis(fn,deg,ans).map(function(t){return {html:tokHTML(t),ok:false}}));
+      q.hint={mode:'trig',fn:fn,deg:deg};
+    }
+    q.choices=ch;
+    return q;
+  }
+
+  function makeItems(){
+    var trig=ST.tab!=='conv', ang=anglesFor(ST.range,trig), items;
+    if(ST.tab==='conv') items=ang.map(function(d){return {type:'conv',dir:ST.dir,deg:d}});
+    else if(ST.tab==='mix'){items=[];ang.forEach(function(d){['sin','cos','tan'].forEach(function(f){items.push({type:'trig',fn:f,deg:d})})})}
+    else items=ang.map(function(d){return {type:'trig',fn:ST.tab,deg:d}});
+    return shuffle(items).slice(0,10);
+  }
+
+  /* まちがえた問題は、このあと3回（間をあけて）もう一度出す */
+  function addRepeats(q){
+    var have=0, k;
+    for(k=ST.i+1;k<ST.qs.length;k++) if(ST.qs[k].sum===q.sum) have++;
+    for(var j=0;j<3-have;j++){
+      var nq=buildQ(q.item); nq.rep=true;
+      var pos=Math.min(ST.qs.length, ST.i+3*(have+j+1)+Math.floor(Math.random()*2));
+      ST.qs.splice(pos,0,nq);
+    }
+  }
+
+  /* ---------- 単位円（ヒント） ---------- */
+  function circleSVG(mode,fn,hl,lab){
+    var R=150, RAD=Math.PI/180, trig=mode==='trig', hlA=hl===360?0:hl;
+    var r1=function(v){return Math.round(v*10)/10};
+    var P=function(a){return [R*Math.cos(a*RAD),-R*Math.sin(a*RAD)]};
+    var s='<svg class="uc" viewBox="-280 -218 560 436" role="img" aria-label="単位円">';
+    s+='<circle class="u-circ" r="'+R+'"/>';
+    ANG.forEach(function(a){var p=P(a);s+='<line class="u-sp" x1="0" y1="0" x2="'+r1(p[0])+'" y2="'+r1(p[1])+'"/>'});
+    s+='<line class="u-ax" x1="'+(-R-10)+'" y1="0" x2="'+(R+10)+'" y2="0"/><line class="u-ax" x1="0" y1="'+(-R-10)+'" x2="0" y2="'+(R+10)+'"/>';
+    if(trig && lab && hl!=null){
+      var p=P(hlA), x=r1(p[0]), y=r1(p[1]);
+      if(hl===360) s+='<circle class="u-arc" r="32"/>';
+      else if(hl>0){
+        var ex=r1(32*Math.cos(hl*RAD)), ey=r1(-32*Math.sin(hl*RAD));
+        s+='<path class="u-arc" d="M32 0A32 32 0 '+(hl>180?1:0)+' 0 '+ex+' '+ey+'"/>';
+      }
+      s+='<line class="u-foot" x1="'+x+'" y1="'+y+'" x2="'+x+'" y2="0"/>';
+      s+='<line class="u-hl" x1="0" y1="0" x2="'+x+'" y2="'+y+'"/>';
+      if(fn==='sin'||fn==='tan') s+='<line class="u-hy" x1="'+x+'" y1="0" x2="'+x+'" y2="'+y+'"/>';
+      if(fn==='cos'||fn==='tan') s+='<line class="u-hx" x1="0" y1="0" x2="'+x+'" y2="0"/>';
+    }
+    ANG.forEach(function(a){
+      var c=Math.cos(a*RAD), sn=Math.sin(a*RAD), on=lab&&trig&&a===hlA;
+      var i0=a%90===0?10:6, o0=a%90===0?12:8;
+      s+='<line class="u-tk" x1="'+r1((R-i0)*c)+'" y1="'+r1(-(R-i0)*sn)+'" x2="'+r1((R+o0)*c)+'" y2="'+r1(-(R+o0)*sn)+'"/>';
+      s+='<circle class="u-dot'+(on?' on':'')+'" cx="'+r1(R*c)+'" cy="'+r1(-R*sn)+'" r="'+(on?6:3.5)+'"/>';
+    });
+    if(!lab) return s+'</svg>';
+    ANG.forEach(function(a){
+      var c=Math.cos(a*RAD), sn=Math.sin(a*RAD), on=trig&&a===hlA;
+      var lx=r1((R+17)*c), ly=r1(-(R+17)*sn);
+      var an=c>0.3?'start':(c<-0.3?'end':'middle'), top=sn>0.9, bot=sn<-0.9, y1, y2;
+      if(trig){ if(top){y1=ly-20;y2=ly-4}else if(bot){y1=ly+17;y2=ly+33}else{y1=ly-1;y2=ly+16} }
+      else y1=top?ly-5:(bot?ly+17:ly+6);
+      s+='<text class="u-rad'+(on?' on':'')+'" x="'+lx+'" y="'+y1+'" text-anchor="'+an+'">'+radText(a)+'</text>';
+      if(trig){
+        var hx=on&&(fn==='cos'||fn==='tan'), hy=on&&(fn==='sin'||fn==='tan');
+        s+='<text class="u-co" x="'+lx+'" y="'+y2+'" text-anchor="'+an+'">(<tspan class="'+(hx?'hx':'')+'">'+tokText(COS[a])+'</tspan>, <tspan class="'+(hy?'hy':'')+'">'+tokText(SIN[a])+'</tspan>)</text>';
+      }
+      var dx,dy,da='middle';
+      if(a===0){dx=R-9;dy=4;da='end'}
+      else if(a===180){dx=-(R-9);dy=4;da='start'}
+      else{dx=r1((R-28)*c);dy=r1(-(R-28)*sn+4)}
+      s+='<text class="u-deg" x="'+dx+'" y="'+dy+'" text-anchor="'+da+'">'+(a===0?'0°=360°':a+'°')+'</text>';
+    });
+    return s+'</svg>';
+  }
+  function hintHTML(q,lab){
+    if(!lab) return circleSVG(q.hint.mode,q.hint.fn,q.hint.deg,false);
+    var h=q.hint, tip, note;
+    if(h.mode==='conv'){
+      tip=h.dir==='d2r'
+        ? '<b>180° ＝ π</b>（半円）、<b>360° ＝ 2π</b>（1周）。だから <b>1° ＝ '+frac('π',180)+'</b>。度の数に '+frac('π',180)+' をかけて約分しよう。'
+        : '<b>π ＝ 180°</b> に置きかえよう。たとえば '+frac('π',4)+' なら 180° ÷ 4 ＝ 45°。';
+      note='<span>外側：ラジアン（弧度法）</span><span>内側：度（度数法）</span>';
+    }else{
+      tip={sin:'<b>sin θ</b> は、単位円周上の点の <b>y座標</b>（たて）。',
+           cos:'<b>cos θ</b> は、単位円周上の点の <b>x座標</b>（よこ）。',
+           tan:'<b>tan θ ＝ y ÷ x</b>（＝ sin θ ÷ cos θ）。x が 0 の角度では決まらない。'}[h.fn];
+      note='<span>外側：ラジアンと点の座標 (x, y)</span><span>内側：度</span><span class="kx">x座標（cos）</span><span class="ky">y座標（sin）</span>';
+    }
+    return '<p class="tip">'+tip+'</p>'+circleSVG(h.mode,h.fn,h.deg,true)+'<p class="note">'+note+'</p>';
+  }
+
+  /* ---------- 画面の更新 ---------- */
+  var NAMES={tab:{conv:'角度の変換',sin:'sin',cos:'cos',tan:'tan',mix:'ミックス'},dir:{d2r:'度数法→弧度法',r2d:'弧度法→度数法'},range:['0°〜180°','180°〜360°','すべて']};
+  function renderSettings(){
+    [['#segTab','tab'],['#segDir','dir'],['#segRange','range']].forEach(function(p){
+      document.querySelectorAll(p[0]+' button').forEach(function(b){
+        b.setAttribute('aria-pressed',String(b.dataset.v===String(ST[p[1]])));
+      });
+    });
+    $('#rowDir').hidden=ST.tab!=='conv';
+    var sb=$('#sndBtn');
+    sb.setAttribute('aria-pressed',String(soundOn));
+    sb.textContent=soundOn?'音 ON':'音 OFF';
+  }
+  function setHintBtns(){
+    $('#hintPlain').setAttribute('aria-pressed',String(ST.hintMode==='plain'));
+    $('#hintFull').setAttribute('aria-pressed',String(ST.hintMode==='full'));
+  }
+  function clearTimer(){if(ST.timer){clearTimeout(ST.timer);ST.timer=null}}
+
+  function start(items){
+    clearTimer();stopConfetti();
+    ST.qs=(items||makeItems()).map(function(it){return buildQ(it)});
+    ST.n=ST.qs.length;ST.i=0;ST.score=0;ST.mistakes=0;ST.wrong=[];
+    $('#result').hidden=true;$('#quiz').hidden=false;
+    showQ();
+  }
+  function showQ(){
+    var q=ST.qs[ST.i];
+    ST.answered=false;ST.hintMode=null;
+    $('#qNo').textContent='第 '+(ST.i+1)+' 問 / '+ST.qs.length;
+    $('#scoreChip').textContent='正解 '+ST.score;
+    $('#barFill').style.width=(ST.i/ST.qs.length*100)+'%';
+    $('#qLabel').innerHTML=(q.rep?'<span class="rep">ふくしゅう</span>':'')+q.label;
+    $('#qText').innerHTML=q.prompt;
+    var box=$('#choices');box.innerHTML='';
+    q.choices.forEach(function(c,idx){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice';
+      b.innerHTML='<span class="no">'+'①②③④'.charAt(idx)+'</span><span class="val">'+c.html+'</span>';
+      b.addEventListener('click',function(){answer(idx)});
+      box.appendChild(b);
+    });
+    $('#hintPanel').hidden=true;$('#fb').hidden=true;
+    setHintBtns();
+  }
+  function answer(idx){
+    if(ST.answered) return;
+    ST.answered=true;
+    var q=ST.qs[ST.i], ok=q.choices[idx].ok;
+    document.querySelectorAll('#choices .choice').forEach(function(b,k){
+      b.disabled=true;
+      var no=b.querySelector('.no');
+      if(q.choices[k].ok){b.classList.add('is-ok');no.textContent='✓'}
+      else if(k===idx){b.classList.add('is-ng');no.textContent='✕'}
+      else b.classList.add('is-dim');
+    });
+    var fb=$('#fb');
+    if(ok){
+      if(!q.rep) ST.score++;
+      sfxOk();
+      fb.className='fb ok';
+      $('#fbTitle').textContent='せいかい！';
+      $('#fbEx').hidden=true;$('#fbNote').hidden=true;$('#nextBtn').hidden=true;
+      fb.hidden=false;
+      ST.timer=setTimeout(next,1300);
+    }else{
+      ST.mistakes++;ST.wrong.push(q);
+      sfxNg();
+      addRepeats(q);
+      fb.className='fb ng';
+      $('#fbTitle').textContent='ざんねん。解き方を確認しよう';
+      $('#fbEx').innerHTML=q.expl;$('#fbEx').hidden=false;
+      $('#fbNote').textContent='この問題は、このあと 3 回また出るよ。';$('#fbNote').hidden=false;
+      var nb=$('#nextBtn');nb.hidden=false;
+      nb.textContent=ST.i+1>=ST.qs.length?'結果を見る':'次の問題へ';
+      fb.hidden=false;
+      nb.focus({preventScroll:false});
+    }
+    $('#scoreChip').textContent='正解 '+ST.score;
+    $('#barFill').style.width=((ST.i+1)/ST.qs.length*100)+'%';
+  }
+  function next(){
+    clearTimer();
+    ST.i++;
+    if(ST.i>=ST.qs.length) showResult(); else showQ();
+  }
+  function nextStepState(){
+    if(ST.range<2) return {range:ST.range+1};
+    if(ST.tab==='conv'&&ST.dir==='d2r') return {dir:'r2d',range:0};
+    var order=['conv','sin','cos','tan','mix'], k=order.indexOf(ST.tab);
+    if(k<order.length-1) return {tab:order[k+1],range:0};
+    return null;
+  }
+  function stepLabel(n){
+    var t=n.tab||ST.tab, d=n.dir||ST.dir, r=n.range;
+    return '次のステップへ（'+NAMES.tab[t]+(t==='conv'?'・'+NAMES.dir[d]:'')+'・'+NAMES.range[r]+'）';
+  }
+  function showResult(){
+    $('#quiz').hidden=true;$('#result').hidden=false;
+    var perfect=ST.mistakes===0, seen={}, uniq=[];
+    ST.wrong.forEach(function(q){if(!seen[q.sum]){seen[q.sum]=1;uniq.push(q)}});
+    $('#resScore').textContent=ST.score;$('#resOf').textContent=' / '+ST.n;
+    $('#resMsg').textContent=perfect
+      ?'パーフェクト！ぜんぶ正解！次のステップに進もう。'
+      :'まちがえた '+uniq.length+' 問は、ふくしゅうでもう一度やったよ。もう一度チャレンジしよう。';
+    var hc=ST.qs.filter(function(q){return q.hinted&&!q.rep}).length;
+    $('#resHints').textContent=hc?'ヒントを見た問題：'+hc+' 問':'ヒントなしで解きました。';
+    var ul=$('#resWrong');ul.innerHTML='';
+    uniq.forEach(function(q){var li=document.createElement('li');li.innerHTML=q.sum;ul.appendChild(li)});
+    var bw=$('#btnWrong');bw.hidden=!uniq.length;
+    bw.onclick=function(){start(uniq.map(function(q){return q.item}))};
+    var ns=nextStepState(), bn=$('#btnNext');
+    bn.hidden=!ns;
+    if(ns){bn.textContent=stepLabel(ns);bn.onclick=function(){for(var k in ns) ST[k]=ns[k];save();renderSettings();start()}}
+    $('#btnAgain').focus({preventScroll:false});
+    if(perfect) setTimeout(function(){sfxFan();confetti()},250);
+  }
+  function setHint(m){
+    var q=ST.qs[ST.i], hp=$('#hintPanel');
+    ST.hintMode=ST.hintMode===m?null:m;
+    if(ST.hintMode){q.hinted=true;hp.innerHTML=hintHTML(q,ST.hintMode==='full')}
+    hp.hidden=!ST.hintMode;
+    setHintBtns();
+  }
+
+  /* ---------- イベント ---------- */
+  [['#segTab','tab',false],['#segDir','dir',false],['#segRange','range',true]].forEach(function(p){
+    $(p[0]).addEventListener('click',function(e){
+      var b=e.target.closest('button');if(!b) return;
+      ST[p[1]]=p[2]?Number(b.dataset.v):b.dataset.v;
+      save();renderSettings();start();
+    });
+  });
+  $('#hintPlain').addEventListener('click',function(){setHint('plain')});
+  $('#hintFull').addEventListener('click',function(){setHint('full')});
+  $('#sndBtn').addEventListener('click',function(){
+    soundOn=!soundOn;save();renderSettings();
+    if(soundOn){var c=ac();if(c) note(c,880,0,.15,'sine',.2)}
+  });
+  $('#nextBtn').addEventListener('click',next);
+  $('#btnAgain').addEventListener('click',function(){start()});
+  document.addEventListener('keydown',function(e){
+    if(e.ctrlKey||e.metaKey||e.altKey) return;
+    if($('#quiz').hidden||ST.answered) return;
+    if(e.key>='1'&&e.key<='4') answer(Number(e.key)-1);
+  });
+
+  renderSettings();
+  start();
+})();
+</script>
