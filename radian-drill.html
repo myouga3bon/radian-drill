@@ -249,11 +249,12 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
     return p.d===1?(p.n===1?'':p.n)+'π':piFrac(p.n,p.d);
   }
   /* πは分数の横棒の右どなりに置く（例：3/4 の右に π） */
-  function piFrac(n,d){return frac(n,d)+'π'}
+  function piFrac(n,d){return n===1?frac('π',d):frac(n,d)+'π'}
   function radText(a){
     if(a===0) return '0, 2π';
     var p=radParts(a);
-    return (p.d>1?p.n+'/'+p.d:(p.n===1?'':p.n))+'π';
+    if(p.d>1) return p.n===1?'π/'+p.d:p.n+'/'+p.d+'π';
+    return (p.n===1?'':p.n)+'π';
   }
   function tokHTML(t){
     if(t==='N') return '<span class="und">定義できない</span>';
