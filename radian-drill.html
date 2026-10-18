@@ -114,6 +114,14 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
 .uc .u-hy{stroke:var(--hly);stroke-width:5;stroke-linecap:round}
 .uc .u-hx{stroke:var(--hlx);stroke-width:5;stroke-linecap:round}
 .uc text{font-family:var(--font-math);fill:var(--ink)}
+.uc .u-tan{stroke:var(--hlx);stroke-width:3.5;stroke-linecap:round}
+.uc .u-ext{stroke:var(--axis);stroke-width:1;stroke-dasharray:3 4;opacity:.75}
+.uc .u-hext{stroke:var(--accent);stroke-width:3.5;stroke-dasharray:9 6;stroke-linecap:round}
+.uc .u-tv{font-size:17px;fill:var(--muted)}
+.uc .u-tv.on{font-size:20px;font-weight:700;fill:var(--hly)}
+.uc .u-x1{font-size:19px;font-weight:700;fill:var(--hlx)}
+.uc .u-und{font-size:17px;font-weight:700;fill:var(--hly)}
+.uc .u-halo{paint-order:stroke;stroke:var(--circle-fill);stroke-width:5px;stroke-linejoin:round}
 .uc .u-rad{font-size:22px;font-weight:700}
 .uc .u-rad.on{fill:var(--accent)}
 .uc .u-co{font-size:17px;fill:var(--muted)}
@@ -474,7 +482,84 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
   }
 
   /* ---------- 単位円（ヒント） ---------- */
+  /* tan 用：半径をのばして、直線 x＝1 とぶつかった点の y座標が tan θ */
+  function tanCircleSVG(hl,lab){
+    var R=150, RAD=Math.PI/180;
+    var r1=function(v){return Math.round(v*10)/10};
+    var RS=[0,30,45,60,300,315,330];            /* 半径が x＝1 側にぶつかる角（cos>0） */
+    var ty=function(a){return r1(-R*Math.tan(a*RAD))};
+    var hlA=hl==null?null:(hl===360?0:hl);
+    var c=hlA==null?0:Math.cos(hlA*RAD), sn=hlA==null?0:Math.sin(hlA*RAD);
+    var undef=hlA===90||hlA===270;
+    var eq=hlA==null||undef?-1:(c>0.001?hlA:(hlA+180)%360);   /* 同じ直線上でx＝1と交わる側の角 */
+    var s='<svg class="uc" viewBox="-215 -300 515 600" role="img" aria-label="単位円と直線 x＝1">';
+    s+='<circle class="u-circ" r="'+R+'"/>';
+    ANG.forEach(function(a){
+      s+='<line class="u-sp" x1="0" y1="0" x2="'+r1(R*Math.cos(a*RAD))+'" y2="'+r1(-R*Math.sin(a*RAD))+'"/>';
+    });
+    s+='<line class="u-ax" x1="'+(-R-10)+'" y1="0" x2="'+(R+10)+'" y2="0"/><line class="u-ax" x1="0" y1="'+(-R-10)+'" x2="0" y2="'+(R+10)+'"/>';
+    /* 円の外へのばした半径（x＝1 まで） */
+    RS.forEach(function(a){
+      if(a===0) return;
+      s+='<line class="u-ext" x1="'+r1(R*Math.cos(a*RAD))+'" y1="'+r1(-R*Math.sin(a*RAD))+'" x2="'+R+'" y2="'+ty(a)+'"/>';
+    });
+    /* 直線 x＝1 と、tan の値の目もり */
+    s+='<line class="u-tan" x1="'+R+'" y1="-276" x2="'+R+'" y2="276"/>';
+    RS.forEach(function(a){s+='<line class="u-tk" x1="'+(R-8)+'" y1="'+ty(a)+'" x2="'+(R+8)+'" y2="'+ty(a)+'"/>'});
+    if(lab && hlA!=null){
+      if(hl===360) s+='<circle class="u-arc" r="32"/>';
+      else if(hl>0){
+        s+='<path class="u-arc" d="M32 0A32 32 0 '+(hl>180?1:0)+' 0 '+r1(32*Math.cos(hl*RAD))+' '+r1(-32*Math.sin(hl*RAD))+'"/>';
+      }
+      var px=r1(R*c), py=r1(-R*sn);
+      s+='<line class="u-hl" x1="0" y1="0" x2="'+px+'" y2="'+py+'"/>';
+      if(undef){
+        var d=hlA===90?-1:1;
+        s+='<line class="u-hext" x1="'+px+'" y1="'+py+'" x2="0" y2="'+(d*288)+'"/>';
+        s+='<text class="u-und" x="-12" y="'+(d<0?-236:224)+'" text-anchor="end">平行で交わらない</text>';
+        s+='<text class="u-und" x="-12" y="'+(d<0?-214:246)+'" text-anchor="end">定義できない</text>';
+      }else{
+        var tY=ty(hlA);
+        if(c>0.001) s+='<line class="u-hext" x1="'+px+'" y1="'+py+'" x2="'+R+'" y2="'+tY+'"/>';
+        else s+='<line class="u-hext" x1="0" y1="0" x2="'+R+'" y2="'+tY+'"/>';
+        s+='<line class="u-hy" x1="'+R+'" y1="0" x2="'+R+'" y2="'+tY+'"/>';
+        s+='<circle class="u-dot on" cx="'+px+'" cy="'+py+'" r="6"/>';
+        s+='<circle cx="'+R+'" cy="'+tY+'" r="7" fill="var(--hly)"/>';
+      }
+    }
+    ANG.forEach(function(a){
+      var cc=Math.cos(a*RAD), ss=Math.sin(a*RAD), on=lab&&a===hlA;
+      var i0=a%90===0?10:6, o0=a%90===0?12:8;
+      s+='<line class="u-tk" x1="'+r1((R-i0)*cc)+'" y1="'+r1(-(R-i0)*ss)+'" x2="'+r1((R+o0)*cc)+'" y2="'+r1(-(R+o0)*ss)+'"/>';
+      if(!on) s+='<circle class="u-dot" cx="'+r1(R*cc)+'" cy="'+r1(-R*ss)+'" r="3.5"/>';
+    });
+    if(!lab) return s+'</svg>';
+    s+='<text class="u-x1" x="'+R+'" y="-282" text-anchor="middle">x ＝ 1</text>';
+    /* 右がわの角は、目もりのよこに「角 → tan の値」を書く */
+    RS.forEach(function(a){
+      var on=a===eq;
+      s+='<text class="u-tv'+(on?' on':'')+'" x="'+(R+13)+'" y="'+(ty(a)+6)+'">'+(on?'tan ＝ '+tokText(TAN[a]):radText(a)+' → '+tokText(TAN[a]))+'</text>';
+    });
+    /* それ以外の角のラジアンは円のまわりに書く */
+    ANG.forEach(function(a){
+      if(RS.indexOf(a)>=0) return;
+      var cc=Math.cos(a*RAD), ss=Math.sin(a*RAD), on=a===hlA;
+      var lx=r1((R+17)*cc), ly=r1(-(R+17)*ss);
+      var an=cc<-0.3?'end':'middle', y1=ss>0.9?ly-6:(ss<-0.9?ly+22:ly+7);
+      s+='<text class="u-rad u-halo'+(on?' on':'')+'" x="'+lx+'" y="'+y1+'" text-anchor="'+an+'">'+radText(a)+'</text>';
+    });
+    /* 内がわの度 */
+    ANG.forEach(function(a){
+      var cc=Math.cos(a*RAD), ss=Math.sin(a*RAD), dx,dy,da='middle';
+      if(a===0){dx=R-9;dy=5;da='end'}
+      else if(a===180){dx=-(R-9);dy=5;da='start'}
+      else{dx=r1((R-29)*cc);dy=r1(-(R-29)*ss+5)}
+      s+='<text class="u-deg" x="'+dx+'" y="'+dy+'" text-anchor="'+da+'">'+(a===0?'0°=360°':a+'°')+'</text>';
+    });
+    return s+'</svg>';
+  }
   function circleSVG(mode,fn,hl,lab){
+    if(mode==='trig'&&fn==='tan') return tanCircleSVG(hl,lab);
     var R=150, RAD=Math.PI/180, trig=mode==='trig', hlA=hl===360?0:hl;
     var r1=function(v){return Math.round(v*10)/10};
     var P=function(a){return [R*Math.cos(a*RAD),-R*Math.sin(a*RAD)]};
@@ -531,8 +616,10 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
     }else{
       tip={sin:'<b>sin θ</b> は、単位円周上の点の <b>y座標</b>（たて）。',
            cos:'<b>cos θ</b> は、単位円周上の点の <b>x座標</b>（よこ）。',
-           tan:'<b>tan θ ＝ y ÷ x</b>（＝ sin θ ÷ cos θ）。x が 0 の角度では決まらない。'}[h.fn];
-      note='<span>外側：ラジアンと点の座標 (x, y)</span><span>内側：度</span><span class="kx">x座標（cos）</span><span class="ky">y座標（sin）</span>';
+           tan:'<b>tan θ</b> は、半径を<b>のばして</b>、直線 <b>x ＝ 1</b> とぶつかった点の <b>y座標</b>。90° より大きい角は、原点をこえて反対がわへのばそう。90°・270° は x ＝ 1 と平行で交わらないので、定義できない。'}[h.fn];
+      note=h.fn==='tan'
+        ? '<span>外側：ラジアン</span><span>内側：度</span><span class="kx">青緑：直線 x ＝ 1</span><span class="ky">オレンジ：tan θ（y座標）</span>'
+        : '<span>外側：ラジアンと点の座標 (x, y)</span><span>内側：度</span><span class="kx">x座標（cos）</span><span class="ky">y座標（sin）</span>';
     }
     return '<p class="tip">'+tip+'</p>'+circleSVG(h.mode,h.fn,h.deg,true)+'<p class="note">'+note+'</p>';
   }
