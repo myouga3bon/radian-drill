@@ -47,6 +47,9 @@ button{font:inherit;color:inherit}
 .top{display:flex;gap:12px;align-items:center}
 .top>div{min-width:0}
 .logo{width:50px;height:50px;flex:none;color:var(--accent)}
+.logo.chara{width:62px;height:61px}
+.top h1{white-space:nowrap}
+.top .snd{padding-inline:8px}
 h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02em}
 .top p{margin:2px 0 0;color:var(--muted);font-size:.9rem;line-height:1.45}
 
@@ -160,6 +163,8 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
 .res-label{margin:0;font-size:.9rem;font-weight:700;letter-spacing:.06em;color:var(--soft-ink)}
 .res-score{margin:0;font-family:var(--font-math);font-size:4rem;line-height:1.2;font-weight:700;color:var(--accent)}
 .res-score small{font-size:1.6rem;color:var(--muted)}
+.zab{display:block;font-size:1.7rem;font-weight:900;color:var(--accent);margin-bottom:4px;line-height:1.3}
+.zab.ng{color:var(--ng)}
 .res-msg{margin:4px 0 12px;font-size:1.1rem}
 .wlist{display:flex;flex-direction:column;gap:6px;margin:0 0 14px;padding:0;list-style:none}
 .wlist li{background:var(--ng-bg);border:1px solid var(--ng-line);border-radius:10px;padding:6px 12px;font-family:var(--font-math);font-size:1.45rem}
@@ -192,6 +197,9 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
 .gfb{margin-top:14px;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--bg);text-align:center}
 .gfb.ok{background:var(--ok-bg);border-color:var(--ok-line)}
 .gfb.ng{background:var(--ng-bg);border-color:var(--ng-line)}
+#gKind{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+#gKind button{padding:8px 2px;line-height:1.3;white-space:nowrap}
+#gKind small{font-weight:500;font-size:.8rem}
 .gfb .ft{margin:0;font-size:1.3rem;font-weight:900}
 .gfb.ok .ft{color:var(--ok)} .gfb.ng .ft{color:var(--ng)}
 .gfb .ex{margin:4px 0 10px;font-family:var(--font-math);font-size:1.45rem}
@@ -200,7 +208,24 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
 
 <main class="wrap">
   <header class="top">
-    <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 24H44M24 24L38.1 9.9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M34 24A10 10 0 0 0 31.07 16.93" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+    <svg class="logo chara" viewBox="0 0 86 84" role="img" aria-label="落語家のキャラクター">
+      <rect x="6" y="70" width="68" height="11" rx="5" fill="#c2255c"/>
+      <rect x="6" y="70" width="68" height="3" rx="1.5" fill="#e64980"/>
+      <path d="M14 72C14 57 24 50 40 50s26 7 26 22z" fill="#1d5a3b"/>
+      <path d="M31 50l9 16 9-16" fill="#f3f0e6"/>
+      <path d="M32 50l8 14 8-14" fill="none" stroke="#b9c9bd" stroke-width="1.5"/>
+      <rect x="36" y="42" width="8" height="9" fill="#f0c9a4"/>
+      <ellipse cx="26.5" cy="27" rx="2.6" ry="4" fill="#f0c9a4"/><ellipse cx="53.5" cy="27" rx="2.6" ry="4" fill="#f0c9a4"/>
+      <ellipse cx="40" cy="26" rx="13" ry="18" fill="#ffd9b8"/>
+      <path d="M27.5 17C27 9 33 5.5 40 5.5S53 9 52.5 17c-2-2.5-4.5-3.8-6-4.2-3.8-.7-8-.9-12 0-1.5.4-4 1.7-6 4.2z" fill="#2f2723"/>
+      <path d="M31 24.500q3-3 6.500-.8M42.500 23.700q3.500-2.200 6.500.8" fill="none" stroke="#2f2723" stroke-width="2" stroke-linecap="round"/>
+      <path d="M32 28.500q2.800 2.800 5.600 0M42.400 28.500q2.800 2.800 5.600 0" fill="none" stroke="#2f2723" stroke-width="2.100" stroke-linecap="round"/>
+      <path d="M40 29v6" stroke="#e5b58c" stroke-width="1.500" stroke-linecap="round"/>
+      <path d="M35 39q5 4.500 10 0" fill="#fff" stroke="#8a3b2e" stroke-width="1.900" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="31" cy="34" r="2.400" fill="#ff9aa9" opacity=".5"/><circle cx="49" cy="34" r="2.400" fill="#ff9aa9" opacity=".5"/>
+      <g><path d="M58 63L35.8 57.0A23 23 0 0 1 80.2 57.0z" fill="#ffe066" stroke="#c2255c" stroke-width="1.6" stroke-linejoin="round"/><path d="M58 63L35.8 57.0A23 23 0 0 1 38.1 51.5z" fill="#f08c00" opacity=".35"/><path d="M58 63L41.7 46.7A23 23 0 0 1 46.5 43.1z" fill="#f08c00" opacity=".35"/><path d="M58 63L52.0 40.8A23 23 0 0 1 58.0 40.0z" fill="#f08c00" opacity=".35"/><path d="M58 63L64.0 40.8A23 23 0 0 1 69.5 43.1z" fill="#f08c00" opacity=".35"/><path d="M58 63L74.3 46.7A23 23 0 0 1 77.9 51.5z" fill="#f08c00" opacity=".35"/><path d="M58 63L35.8 57.0M58 63L41.7 46.7M58 63L52.0 40.8M58 63L64.0 40.8M58 63L74.3 46.7M58 63L80.2 57.0" stroke="#c2255c" stroke-width="1.1"/><circle cx="58" cy="63" r="1.6" fill="#c2255c"/></g>
+      <circle cx="58" cy="65" r="4.200" fill="#ffd9b8"/>
+    </svg>
     <div>
       <h1>弧度法ドリル</h1>
       <p>度数法と弧度法の変換、sin・cos・tan を、単位円を見ながら身につけよう</p>
@@ -278,6 +303,13 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
   <section class="card" id="game" hidden aria-label="ぬりえゲーム">
     <div class="meta"><span id="gNo">第 1 問</span><span class="chip" id="gScore">正解 0</span></div>
     <div class="bar"><i id="gBar" style="width:0"></i></div>
+    <div class="row wide" style="margin-top:12px">
+      <div class="seg" id="gKind" role="group" aria-label="出題の形">
+        <button type="button" data-v="rad" aria-pressed="true">弧度ぬりえ<br><small>π/4 まで</small></button>
+        <button type="button" data-v="deg" aria-pressed="false">角度ぬりえ<br><small>45° まで</small></button>
+        <button type="button" data-v="mix" aria-pressed="false">ミックス<br><small>どちらも</small></button>
+      </div>
+    </div>
     <div class="row" style="margin-top:12px"><span class="lab">範囲</span>
       <div class="seg steps" id="gRange" role="group" aria-label="角度の範囲">
         <button type="button" data-v="0" aria-pressed="true"><b>STEP 1</b><small>0°〜180°</small></button>
@@ -296,11 +328,7 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
       <line class="g-start" x1="0" y1="0" x2="150" y2="0"/>
       <text x="52" y="-9" style="font-size:13px">スタート</text>
     </svg>
-    <p class="gtip">スタート（右の線）から反時計まわりに、目もりを指でおしてぬろう。ドラッグでもOK。</p>
-    <div class="gbtns">
-      <button type="button" class="btn ghost" id="gClear">ぬりなおす</button>
-      <button type="button" class="btn" id="gCheck">答え合わせ</button>
-    </div>
+    <p class="gtip">スタート（右の線）から反時計まわりに、目もりを指でおすと、すぐに答え合わせ。ドラッグのときは、指をはなした場所で答え合わせ。</p>
     <div class="gfb" id="gFb" hidden role="status" aria-live="polite">
       <p class="ft" id="gFt"></p>
       <p class="ex" id="gEx"></p>
@@ -869,14 +897,19 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
     var t=n.tab||ST.tab, d=n.dir||ST.dir, r=n.range;
     return '次のステップへ（'+NAMES.tab[t]+(t==='conv'?'・'+NAMES.dir[d]:'')+'・'+NAMES.range[r]+'）';
   }
+  function setMsg(el,perfect,miss,okTxt,otherTxt){
+    if(perfect) el.innerHTML='<span class="zab">座布団３枚！！</span>'+okTxt;
+    else if(miss>=3) el.innerHTML='<span class="zab ng">座布団ぜんぶもってって！</span>'+otherTxt;
+    else el.textContent=otherTxt;
+  }
   function showResult(){
     $('#quiz').hidden=true;$('#result').hidden=false;
     var perfect=ST.mistakes===0, seen={}, uniq=[];
     ST.wrong.forEach(function(q){if(!seen[q.sum]){seen[q.sum]=1;uniq.push(q)}});
     $('#resScore').textContent=ST.score;$('#resOf').textContent=' / '+ST.n;
-    $('#resMsg').textContent=perfect
-      ?'パーフェクト！ぜんぶ正解！次のステップに進もう。'
-      :'まちがえた '+uniq.length+' 問は、ふくしゅうでもう一度やったよ。もう一度チャレンジしよう。';
+    setMsg($('#resMsg'),perfect,uniq.length,
+      'パーフェクト！ぜんぶ正解！次のステップに進もう。',
+      'まちがえた '+uniq.length+' 問は、ふくしゅうでもう一度やったよ。もう一度チャレンジしよう。');
     var hc=ST.qs.filter(function(q){return q.hinted&&!q.rep}).length;
     $('#resHints').textContent=hc?'ヒントの単位円を出していた問題：'+hc+' 問':'ヒントなしで解きました。';
     var ul=$('#resWrong');ul.innerHTML='';
@@ -917,7 +950,7 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
   });
 
   /* ---------- ぬりえゲーム ---------- */
-  var G={lastDrill:null,mode:'drill',range:0,qs:[],i:0,score:0,sel:0,done:true,drag:false,hint:null,wrong:[],timer:0,wasResult:false};
+  var G={lastDrill:null,mode:'drill',kind:'rad',range:0,qs:[],i:0,score:0,sel:0,done:true,drag:false,hint:null,wrong:[],timer:0,wasResult:false};
   var SNAP=[30,45,60,90,120,135,150,180,210,225,240,270,300,315,330,360];
   var GR=150;
   function gp(a){var r=a*Math.PI/180;return [Math.round(GR*Math.cos(r)*10)/10,Math.round(-GR*Math.sin(r)*10)/10]}
@@ -963,7 +996,7 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
     clearTimeout(G.timer);stopConfetti();
     var pool=G.range===0?R1.slice():G.range===1?R2.slice():R1.concat(R2);
     var n=G.range===2?10:8;
-    G.qs=shuffle(pool).slice(0,n);
+    G.qs=shuffle(pool).slice(0,n).map(function(d){return {deg:d,kind:G.kind==='mix'?(Math.random()<.5?'rad':'deg'):G.kind}});
     G.i=0;G.score=0;G.wrong=[];
     $('#gRes').hidden=true;$('#game').hidden=false;
     gShow();
@@ -971,15 +1004,14 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
   function gShow(){
     clearTimeout(G.timer);
     G.sel=0;G.done=false;
-    var q=G.qs[G.i];
+    var q=G.qs[G.i].deg, qk=G.qs[G.i].kind;
     $('#gNo').textContent='第 '+(G.i+1)+' 問 / '+G.qs.length;
     $('#gScore').textContent='正解 '+G.score;
     $('#gBar').style.width=(G.i/G.qs.length*100)+'%';
-    $('#gQ').innerHTML=radHTML(q)+' <span class="und" style="font-size:.5em">まで</span>';
+    $('#gQ').innerHTML=(qk==='deg'?'<span>'+q+'°</span>':radHTML(q))+' <span class="und" style="font-size:.5em">まで</span>';
     $('#gFb').hidden=true;
     var a=$('#gAns');a.classList.add('hide');a.setAttribute('d','');
     $('#gFill').setAttribute('class','g-fill hide');
-    $('#gCheck').disabled=false;$('#gClear').disabled=false;
     gPaint();gHintRender();
   }
   function gSet(ang){
@@ -995,31 +1027,25 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
     var a=Math.atan2(-m.y,m.x)*180/Math.PI;
     return a<0?a+360:a;
   }
-  function gCheck(){
-    if(G.done) return;
-    if(!G.sel){
-      var t=$('#gFb');t.hidden=false;t.className='gfb';
-      $('#gFt').textContent='まだぬっていないよ';$('#gEx').textContent='円の目もりをおして、ぬってから押してね。';
-      $('#gNext').hidden=true;return;
-    }
+  function gBoth(q){return radHTML(q)+' ＝ '+q+'°'}
+  function gJudge(){
+    if(G.done||!G.sel) return;
     G.done=true;
-    var q=G.qs[G.i], ok=G.sel===q, fb=$('#gFb');
+    var o=G.qs[G.i], q=o.deg, ok=G.sel===q, fb=$('#gFb');
     fb.hidden=false;fb.className='gfb '+(ok?'ok':'ng');
-    $('#gCheck').disabled=true;$('#gClear').disabled=true;
-    var f=$('#gFill');
-    f.setAttribute('class','g-fill '+(ok?'ok':'ng'));
+    $('#gFill').setAttribute('class','g-fill '+(ok?'ok':'ng'));
     if(ok){
       G.score++;sfxOk();
       $('#gScore').textContent='正解 '+G.score;
       $('#gFt').textContent='ピンポーン！ 正解';
-      $('#gEx').innerHTML=radHTML(q)+' ＝ '+q+'°';
+      $('#gEx').innerHTML=gBoth(q);
       $('#gNext').hidden=true;
       G.timer=setTimeout(gNext,1500);
     }else{
-      sfxNg();G.wrong.push(q);
+      sfxNg();G.wrong.push(o);
       var a=$('#gAns');a.setAttribute('d',wedge(q));a.classList.remove('hide');
       $('#gFt').textContent='ブッブー ざんねん';
-      $('#gEx').innerHTML=radHTML(q)+' ＝ '+q+'° まで（みどりの点線）';
+      $('#gEx').innerHTML=gBoth(q)+' まで<br><small style="font-size:.6em;font-family:var(--font-ui)">（みどりの点線が正解）</small>';
       $('#gNext').hidden=false;$('#gNext').textContent=G.i+1>=G.qs.length?'結果を見る':'次の問題へ';
     }
   }
@@ -1033,9 +1059,9 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
     $('#game').hidden=true;$('#gRes').hidden=false;
     $('#gResScore').textContent=G.score;$('#gResOf').textContent=' / '+G.qs.length;
     var perfect=G.score===G.qs.length;
-    $('#gResMsg').textContent=perfect?'パーフェクト！ぜんぶ正解！':'まちがえた角は下の一覧。もう一度チャレンジしよう。';
+    setMsg($('#gResMsg'),perfect,G.wrong.length,'パーフェクト！ぜんぶ正解！','まちがえた角は下の一覧。もう一度チャレンジしよう。');
     var ul=$('#gResWrong');ul.innerHTML='';
-    G.wrong.forEach(function(q){var li=document.createElement('li');li.innerHTML=radHTML(q)+' ＝ '+q+'°';ul.appendChild(li)});
+    G.wrong.forEach(function(o){var li=document.createElement('li');li.innerHTML=gBoth(o.deg);ul.appendChild(li)});
     if(perfect) setTimeout(function(){sfxFan();confetti()},250);
   }
   function gHintRender(){
@@ -1080,9 +1106,13 @@ h1{margin:0;font-size:1.8rem;font-weight:900;line-height:1.2;letter-spacing:.02e
       gSet(gAngle(e));e.preventDefault();
     });
     svg.addEventListener('pointermove',function(e){if(G.drag) gSet(gAngle(e))});
-    ['pointerup','pointercancel'].forEach(function(t){svg.addEventListener(t,function(){G.drag=false})});
-    $('#gClear').addEventListener('click',function(){if(G.done) return;G.sel=0;$('#gFb').hidden=true;gPaint()});
-    $('#gCheck').addEventListener('click',gCheck);
+    ['pointerup','pointercancel'].forEach(function(t){svg.addEventListener(t,function(){var d=G.drag;G.drag=false;if(d) gJudge()})});
+    $('#gKind').addEventListener('click',function(e){
+      var b=e.target.closest('button');if(!b) return;
+      G.kind=b.dataset.v;
+      document.querySelectorAll('#gKind button').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});
+      gStart();
+    });
     $('#gNext').addEventListener('click',gNext);
     $('#gAgain').addEventListener('click',gStart);
     $('#gRange').addEventListener('click',function(e){
